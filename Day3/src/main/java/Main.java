@@ -11,14 +11,15 @@ public class Main {
 
             DBService service = new DBService(connectivity.getConnection());
             int cnt = service.create(
-                    20,
-                    "zee",
+                    26,
+                    "nim",
                     Date.valueOf(LocalDate.now()),
                     true
             );
             if(cnt > 0) {
                 System.out.println("Employee Created Successfully");
-                service.find();
+               // service.find();
+                service.findEmployeeByName("dog");
             }
 
         } catch (ClassNotFoundException e) {
