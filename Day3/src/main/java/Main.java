@@ -23,8 +23,9 @@ public class Main {
            //     service.findEmployeeByName("dog");
             //}
             //service.txnDemo(60, "kol", Date.valueOf(LocalDate.now()), true, 12);
-service.delete(26);
-            service.find();
+          //service.delete(26);
+          //  service.find();
+            service.findEmployeeWithAgeGreaterThanTen(10);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

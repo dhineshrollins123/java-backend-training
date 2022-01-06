@@ -86,4 +86,17 @@ PreparedStatement ps= connection.prepareStatement(sql);
 
        // connection.commit();
     }
+    public void findEmployeeWithAgeGreaterThanTen(int ageCal) throws SQLException {
+        var sql="select * from emp where age > ?";
+        PreparedStatement ps2= connection.prepareStatement(sql);
+        ps2.setInt(1,ageCal);
+        ResultSet rs=ps2.executeQuery();
+        while(rs.next()){
+            int empId=rs.getInt("empId");
+            String empName= rs.getString("empName");
+            int age=rs.getInt("age");
+            System.out.println("EMP-ID : "+empId+" | "+"EMP-NAME : "+empName+" | "+"EMP-AGE : "+age);
+        }
+
+    }
 }
