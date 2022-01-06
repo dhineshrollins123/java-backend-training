@@ -42,4 +42,20 @@ PreparedStatement ps= connection.prepareStatement(sql);
         }
         rs.close();
     }
+    public void findEmployeeByName(String name) throws SQLException {
+        String sql="select * from emp_info where empNm=?";
+        PreparedStatement ps=connection.prepareStatement(sql);
+        ps.setString(1,name);
+        ResultSet rs=ps.executeQuery();
+
+        while(rs.next()){
+            int id=rs.getInt("empId");
+            String nm= rs.getString("empNm");
+            Date dob=rs.getDate("date");
+            boolean isManager=rs.getBoolean("isManager");
+            System.out.println("ID : "+id+" Name : "+nm+" DOB : "+dob+" isManager : "+isManager);
+        }
+        rs.close();
+
+    }
 }
