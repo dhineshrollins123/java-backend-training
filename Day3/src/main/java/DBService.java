@@ -1,7 +1,5 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Date;
-import java.sql.SQLException;
+import javax.swing.*;
+import java.sql.*;
 
 public class DBService {
 
@@ -31,7 +29,17 @@ public class DBService {
         return 0;
     }
 
-    public void find() {
-
+    public void find() throws SQLException {
+String sql="select * from emp_info";
+PreparedStatement ps= connection.prepareStatement(sql);
+        ResultSet rs=ps.executeQuery();
+        while(rs.next()){
+            int id=rs.getInt("empId");
+            String name= rs.getString("empNm");
+            Date dob=rs.getDate("date");
+            boolean isManager=rs.getBoolean("isManager");
+            System.out.println("ID : "+id+" Name : "+name+" DOB : "+dob+" isManager : "+isManager);
+        }
+        rs.close();
     }
 }
