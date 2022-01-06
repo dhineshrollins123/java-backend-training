@@ -10,7 +10,7 @@ public class Connectivity {
                 "root",
                 "password"
         );
-        connection.setAutoCommit(false);
+        //connection.setAutoCommit(true);
     }
     public Connection getConnection(){
         return connection;

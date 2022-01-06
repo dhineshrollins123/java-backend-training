@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.sql.*;
+import java.time.LocalDate;
 
 public class DBService {
 
@@ -21,12 +22,21 @@ public class DBService {
         return affected;
     }
 
-    public int update() {
-        return 0;
+    public int update(int empId) throws SQLException {
+        var sql="update emp_info set empNm='dhinesh Rollins',isManager=false where empId=?";
+        PreparedStatement ps=connection.prepareStatement(sql);
+        ps.setInt(1,empId);
+        System.out.println("row affected");
+        int affected = ps.executeUpdate();
+        return affected;
     }
 
-    public int delete() {
-        return 0;
+    public int delete(int empId) throws SQLException {
+        var sql="delete from emp_info where empId=?";
+        PreparedStatement ps1= connection.prepareStatement(sql);
+        ps1.setInt(1,empId);
+        int affect= ps1.executeUpdate();
+        return affect;
     }
 
     public void find() throws SQLException {
@@ -74,6 +84,6 @@ PreparedStatement ps= connection.prepareStatement(sql);
         var aff2 = ps2.executeUpdate();
         if(aff2 == 0) connection.rollback();
 
-        connection.commit();
+       // connection.commit();
     }
 }

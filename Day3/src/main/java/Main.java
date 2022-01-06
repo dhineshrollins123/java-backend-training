@@ -19,11 +19,12 @@ public class Main {
           //  );
             //if(cnt > 0) {
           //      System.out.println("Employee Created Successfully");
-               // service.find();
+
            //     service.findEmployeeByName("dog");
             //}
-            service.txnDemo(60, "kol", Date.valueOf(LocalDate.now()), true, 12);
-
+            //service.txnDemo(60, "kol", Date.valueOf(LocalDate.now()), true, 12);
+service.delete(26);
+            service.find();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
