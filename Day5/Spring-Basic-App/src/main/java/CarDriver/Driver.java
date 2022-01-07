@@ -3,15 +3,13 @@ package CarDriver;
 
 public class Driver {
 
-    //    private final Car car;
+    private final Car car;
 
-    /*public Driver(Car car) { // constructorInjection
+    public Driver(Car car) {
         this.car = car;
-    }*/
+    }
 
-    private Car car;
-
-    public void setCar(Car car) { // setterInjection
-        this.car = car;
+    public Car getCar() {
+        return car;
     }
 }
