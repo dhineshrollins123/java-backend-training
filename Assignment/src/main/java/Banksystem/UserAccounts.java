@@ -24,6 +24,7 @@ public class UserAccounts {
         ps.setDouble(7, current_received_account);
         int row_affected = ps.executeUpdate();
         System.out.println("Account Created Sucessfully...\n");
+        connection.commit();
         return row_affected;
     }
 
@@ -31,6 +32,7 @@ public class UserAccounts {
         String sql1 = "select * from employee";
         PreparedStatement ps1 = connection.prepareStatement(sql1);
         ResultSet result = ps1.executeQuery();
+        connection.commit();
         while (result.next()) {
             long acc_num = result.getLong(1);
             String acc_holder = result.getString(2);
@@ -51,6 +53,7 @@ public class UserAccounts {
         PreparedStatement ps2 = connection.prepareStatement(sql2);
         ps2.setLong(1, account_numb);
         ResultSet result = ps2.executeQuery();
+        connection.commit();
         while (result.next()) {
             String acc_holder = result.getString(1);
             double balance = result.getDouble(2);
@@ -67,6 +70,7 @@ public class UserAccounts {
         ps.setDouble(1, account_number);
         int affected = ps.executeUpdate();
         System.out.println("Money Transferred Sucessfully...");
+        connection.commit();
         return affected;
     }
 
@@ -129,6 +133,7 @@ public class UserAccounts {
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setLong(1, account_number);
         ResultSet result = ps.executeQuery();
+        connection.commit();
         while (result.next()) {
             long acc_num = result.getLong(1);
             boolean isActive = result.getBoolean(2);
