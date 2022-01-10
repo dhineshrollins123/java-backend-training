@@ -1,12 +1,12 @@
-package config;
+package com.dk.config;
 
-import car.Car;
-import driver.Driver;
+import com.dk.car.Car;
+import com.dk.driver.Driver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-@ComponentScan("com.config")
+@ComponentScan("com.dk")
 @Configuration
 public class AppConfig {
     @Bean

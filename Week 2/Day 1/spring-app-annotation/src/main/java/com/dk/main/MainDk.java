@@ -1,14 +1,14 @@
-package main;
+package com.dk.main;
 
-import car.Car;
-import config.AppConfig;
-import driver.Driver;
+import com.dk.car.Car;
+import com.dk.config.AppConfig;
+import com.dk.driver.Driver;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Arrays;
 
-public class Main {
+public class MainDk {
 
     public static void main(String[] args) {
         ApplicationContext context=new AnnotationConfigApplicationContext(AppConfig.class);

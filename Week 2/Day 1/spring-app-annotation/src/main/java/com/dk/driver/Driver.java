@@ -1,6 +1,6 @@
-package driver;
+package com.dk.driver;
 
-import car.Car;
+import com.dk.car.Car;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Driver {
