@@ -30,4 +30,9 @@ public class CarController {
         return service.findAllCars();
 
     }
+    @PutMapping
+    public String updateCars(@RequestBody Car car){
+         service.updateCars(car);
+         return "Car has been Updated";
+    }
 }
