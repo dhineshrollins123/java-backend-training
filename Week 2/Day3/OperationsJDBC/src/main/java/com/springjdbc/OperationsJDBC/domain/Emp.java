@@ -7,7 +7,15 @@ public class Emp {
     private String name;
     private Date dob;
     private boolean isManager;
+    public Emp() {
+    }
 
+    public Emp(int id, String name, String dob, Boolean isManager) {
+        this.id = id;
+        this.name = name;
+        this.dob = Date.valueOf(dob);
+        this.isManager = isManager;
+    }
     public int getId() {
         return id;
     }
