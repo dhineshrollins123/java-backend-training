@@ -1,6 +1,11 @@
 package Banksystem;
 
+import com.mysql.cj.result.LocalDateTimeValueFactory;
+import myownexception.AccountInvalidOwnException;
+
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class UserAccounts {
@@ -67,7 +72,6 @@ public class UserAccounts {
         scanner.nextLine();
         var sql = "select contact from admin where contact=?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        // ps.setInt(1, (int) con);
         ps.setLong(1, con);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
@@ -93,10 +97,11 @@ public class UserAccounts {
         }
         if (password.equals(pwd)) {
             System.out.println(" \n\t\t * * * LOGIN SUCESSFULLY * * *\n");
-            String sql3 = "insert into login values (?,?)";
+            String sql3 = "insert into login values (?,?,?)";
             PreparedStatement ps3 = connection.prepareStatement(sql3);
             ps3.setLong(1, contact);
             ps3.setString(2, password);
+            ps3.setDate(3, Date.valueOf((LocalDate.now())));
             int affected1 = ps3.executeUpdate();
             connection.commit();
         } else {
@@ -117,7 +122,7 @@ public class UserAccounts {
         ps.setBoolean(4, isActive);
         ps.setDouble(5, balance);
         int row_affected = ps.executeUpdate();
-        System.out.println("Account Created Sucessfully...\n");
+        System.out.println("\n\tAccount Created Sucessfully...\n");
         connection.commit();
         return row_affected;
     }
@@ -178,14 +183,14 @@ public class UserAccounts {
         }
         System.out.println("How Much You Want to Send :");
         double amount = scanner.nextDouble();
-        String sql5= "select balance from employee where account_number=?";
-        PreparedStatement ps5= connection.prepareStatement(sql5);
+        String sql5 = "select balance from employee where account_number=?";
+        PreparedStatement ps5 = connection.prepareStatement(sql5);
         ps5.setLong(1, account_number1);
         ResultSet rs5 = ps5.executeQuery();
         while (rs5.next()) {
             bal = rs5.getDouble(1);
-            System.out.println("\nCurrent Balance :"+bal);
-            System.out.println("You Entered Amount is : "+amount);
+            System.out.println("\nCurrent Balance :" + bal);
+            System.out.println("You Entered Amount is : " + amount);
         }
 
         if (amount > bal) {
@@ -241,7 +246,7 @@ public class UserAccounts {
         var affect2 = ps2.executeUpdate();
         if (affect2 == 0) {
             connection.rollback();
-            System.out.println("....Transaction Failed....");
+            System.out.println("\n....Transaction Failed....");
         } else {
             connection.commit();
             System.out.println("\n\t\t*** Transaction Completed Sucessfully...***");
@@ -274,21 +279,52 @@ public class UserAccounts {
         }
     }
 
-    public void accountStatusChecking(long account_number) throws SQLException {
-        var sql = "select account_number,isActive from employee where account_number=?";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setLong(1, account_number);
-        ResultSet result = ps.executeQuery();
-        connection.commit();
-        while (result.next()) {
-            long acc_num = result.getLong(1);
-            boolean isActive = result.getBoolean(2);
-            System.out.println("Account Number : " + acc_num);
-            System.out.println("Account Status : " + isActive);
+    public void accountActivation(long account_number) throws SQLException {
+        System.out.println("\nEnter Account Number For Account Activation : ");
+        long acNum = scanner.nextLong();
 
+        var sql = "update employee set isActive = true where account_number=" + acNum;
+        PreparedStatement ps = connection.prepareStatement(sql);
+        int result = ps.executeUpdate();
+        var sql1 = "select account_number from employee where account_number=" + acNum;
+        PreparedStatement ps2 = connection.prepareStatement(sql1);
+        ResultSet rs = ps2.executeQuery();
+        while (rs.next()) {
+            acc_num1 = rs.getLong("account_number");
+            System.out.println("\n" + acc_num1);
         }
-        result.close();
+        try {
+            if (acNum == acc_num1) {
+                connection.commit();
+                System.out.println("\n Account Activation Process Has Been Done SucessFully...");
+            } else
+                throw new AccountInvalidOwnException("\n\t\t Invalid Please Enter Correct Account Number...");
+        } catch (AccountInvalidOwnException dk) {
+            System.out.println(dk.getMessage());
+        }
     }
 
-
+    public void accountDeActivation(long account_number) throws SQLException {
+        System.out.println("\nEnter Account Number For Account De-Activation : ");
+        long acNum = scanner.nextLong();
+        var sql = "update employee set isActive = false where account_number=" + acNum;
+        PreparedStatement ps = connection.prepareStatement(sql);
+        int result = ps.executeUpdate();
+        var sql1 = "select account_number from employee where account_number=" + acNum;
+        PreparedStatement ps2 = connection.prepareStatement(sql1);
+        ResultSet rs = ps2.executeQuery();
+        while (rs.next()) {
+            acc_num2 = rs.getLong("account_number");
+            System.out.println("\n" + acc_num2);
+        }
+        try {
+            if (acNum == acc_num2) {
+                connection.commit();
+                System.out.println("\n Account De-Activation Process Has Been Done SucessFully...");
+            } else
+                throw new AccountInvalidOwnException("\n\t\tInvalid Please Enter Correct Account Number...");
+        } catch (AccountInvalidOwnException dk) {
+            System.out.println(dk.getMessage());
+        }
+    }
 }

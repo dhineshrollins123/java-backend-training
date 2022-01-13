@@ -23,15 +23,17 @@ public class Main {
         System.out.println("\t\t====### Welcome To Banking System ###====\n");
         while (isTimer == true) {
             System.out.println(" \n\t* Select the Options Given Below \n");
-            System.out.println("\t ENTER 1 : SIGNUP \n");
-            System.out.println("\t ENTER 2 : ADMIN LOGIN \n");
-            System.out.println("\t ENTER 3 : CREATE ACCOUNTS \n");
-            System.out.println("\t ENTER 4 : SHOW ALL ACCOUNTS \n");
-            System.out.println("\t ENTER 5 : TRANSFER MONEY \n");
-            System.out.println("\t ENTER 6 : FOR WITHDRAWL \n");
-            System.out.println("\t ENTER 7 : FOR DEPOSIT \n");
-            System.out.println("\t ENTER 8 : ACCOUNT STATUS CHECKING \n");
-            System.out.println("\t ENTER 9 : EXIT\n");
+            System.out.println("\t\t\t\t ENTER 1 : SIGNUP \n");
+            System.out.println("\t\t\t\t ENTER 2 : ADMIN LOGIN \n");
+            System.out.println("\t\t\t\t ENTER 3 : CREATE ACCOUNTS \n");
+            System.out.println("\t\t\t\t ENTER 4 : SHOW ALL ACCOUNTS \n");
+            System.out.println("\t\t\t\t ENTER 5 : TRANSFER MONEY \n");
+            System.out.println("\t\t\t\t ENTER 6 : FOR WITHDRAWL MONEY \n");
+            System.out.println("\t\t\t\t ENTER 7 : FOR DEPOSIT MONEY\n");
+            System.out.println("\t\t\t\t ENTER 8 : ACCOUNT ACTIVATION\n");
+            System.out.println("\t\t\t\t ENTER 9 : ACCOUNT DEACTIVATION\n");
+            System.out.println("\t\t\t\t ENTER 10 : ADMIN LOGOUT\n");
+            System.out.println("\t\t\t\t ENTER 11 : EXIT\n");
             int option = scanner.nextInt();
 
             switch (option) {
@@ -59,14 +61,14 @@ public class Main {
                 case 4:
                     if (reference.isVerification) {
                         System.out.println("\n YOU SELECTED OPTION :" + option + "\n");
+                        reference.displayAllAccounts();
                     } else System.out.println("Please Login After Come Here...");
-                    reference.displayAllAccounts();
                     break;
                 case 5:
-                    // if (main.isVerification) {
-                    System.out.println("\n YOU SELECTED OPTION :" + option + "\n");
-                    reference.transferMoney(123, 456);
-                    //  } else System.out.println("Please Login After Come Here...");
+                    if (reference.isVerification) {
+                        System.out.println("\n YOU SELECTED OPTION :" + option + "\n");
+                        reference.transferMoney(123, 456);
+                    } else System.out.println("Please Login After Come Here...");
 
                     break;
 
@@ -84,16 +86,29 @@ public class Main {
                     } else System.out.println("Please Login After Come Here...");
 
                     break;
+
                 case 8:
                     if (reference.isVerification) {
                         System.out.println("\n YOU SELECTED OPTION :" + option + "\n");
-                        System.out.println("\n Enter Account Number For Status Checking : ");
-                        long status = scanner.nextLong();
-                        reference.accountStatusChecking(status);
+                        reference.accountActivation(456);
                     } else System.out.println("Please Login After Come Here...");
 
                     break;
                 case 9:
+                    if (reference.isVerification) {
+                        System.out.println("\n YOU SELECTED OPTION :" + option + "\n");
+                        reference.accountDeActivation(123);
+                    } else System.out.println("Please Login After Come Here...");
+
+                    break;
+                case 10:
+                    if (reference.isVerification) {
+                        System.out.println("\n YOU SELECTED OPTION :" + option + "\n");
+                        reference.isVerification = false;
+                    } else System.out.println("Do Login First Then Come Here...");
+                    break;
+
+                case 11:
                     System.out.println("\n YOU SELECTED OPTION :" + option + "\n");
                     System.out.println("\n\t** THANKS FOR VISITING US...COME AGAIN WELCOME...**");
                     isTimer = false;
