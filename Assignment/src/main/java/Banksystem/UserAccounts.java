@@ -166,27 +166,34 @@ public class UserAccounts {
         PreparedStatement ps1 = connection.prepareStatement(sql1);
         ps1.setLong(1, account_number1);
         ResultSet rs1 = ps1.executeQuery();
+
         while (rs1.next()) {
             acc_num1 = rs1.getLong(1);
         }
         if (account_number1 == acc_num1) {
-            System.out.println("\n\t\tSender Account ID Verified Sucessfully");
+            System.out.println("\n\t\tSender Account ID Verified Sucessfully\n");
         } else {
-            System.out.println("\n\t\t Please Enter Correct Account Number");
+            System.out.println("\n\t\t Please Enter Correct Account Number\n");
             return 0;
         }
         System.out.println("How Much You Want to Send :");
         double amount = scanner.nextDouble();
-        while (rs1.next()) {
-            bal = rs1.getDouble("balance");
+        String sql5= "select balance from employee where account_number=?";
+        PreparedStatement ps5= connection.prepareStatement(sql5);
+        ps5.setLong(1, account_number1);
+        ResultSet rs5 = ps5.executeQuery();
+        while (rs5.next()) {
+            bal = rs5.getDouble(1);
+            System.out.println("\nCurrent Balance :"+bal);
+            System.out.println("You Entered Amount is : "+amount);
         }
 
         if (amount > bal) {
-            System.out.println("Insufficient Balance...");
+            System.out.println("\nInsufficient Balance...");
             connection.rollback();
             return 0;
         }
-        System.out.println("Enter Receiver Account Number :");
+        System.out.println("\nEnter Receiver Account Number :");
         long account_number2 = scanner.nextLong();
         String sql2 = "select account_number from employee where account_number=?";
         PreparedStatement ps2 = connection.prepareStatement(sql2);
@@ -194,7 +201,6 @@ public class UserAccounts {
         ResultSet rs2 = ps2.executeQuery();
         while (rs2.next()) {
             acc_num2 = rs2.getLong(1);
-            return 0;
         }
         if (account_number2 == acc_num2) {
             System.out.println("\n\t\tReceiver Account ID Verified Sucessfully");
@@ -212,8 +218,7 @@ public class UserAccounts {
         PreparedStatement ps4 = connection.prepareStatement(sql4);
         ps4.setDouble(1, account_number2);
         int affected2 = ps4.executeUpdate();
-        System.out.println("Money Transferred Sucessfully...");
-
+        System.out.println("\n\t\t*** Money Transferred Sucessfully...***");
         connection.commit();
         return 1;
     }
