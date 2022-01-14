@@ -2,11 +2,10 @@ package com.dk.unittesting.controller;
 
 import com.dk.unittesting.domain.Car;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -25,5 +24,17 @@ public class CarController {
        return ResponseEntity.ok(car);
 
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Integer> getCarById(@PathVariable Long id)  {
+
+        return ResponseEntity.ok(100);
+    }
+
+    @PostMapping
+    public ResponseEntity<Car> saveCar(@RequestBody Car car){
+        return new ResponseEntity<>(car, HttpStatus.CREATED);
+    }
+
+
 
 }
