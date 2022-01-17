@@ -1,6 +1,7 @@
 package com.week2casestudy.bankapp.service;
 
 import com.week2casestudy.bankapp.domain.BankAccount;
+import com.week2casestudy.bankapp.exception.InvalidAccNumberException;
 import com.week2casestudy.bankapp.exception.InvalidAmountException;
 import com.week2casestudy.bankapp.repository.BankRepository;
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,20 +69,20 @@ public class BankServiceImpl implements BankService {
         Optional<BankAccount> option = repository.findById(acNum);
         BankAccount old = option.orElseThrow();
         boolean existStatus = old.getStatus();
-       // if(existStatus==true) {
-            BankAccount newacc = new BankAccount();
-            newacc.setAcCrDt(old.getAcCrDt());
-            newacc.setStatus(true);
-            newacc.setAcHldNm(old.getAcHldNm());
-            newacc.setAcNum(old.getAcNum());
-            newacc.setBalance(old.getBalance());
-            repository.save(newacc);
-            return newacc.getStatus();
-        }
+        // if(existStatus==true) {
+        BankAccount newacc = new BankAccount();
+        newacc.setAcCrDt(old.getAcCrDt());
+        newacc.setStatus(true);
+        newacc.setAcHldNm(old.getAcHldNm());
+        newacc.setAcNum(old.getAcNum());
+        newacc.setBalance(old.getBalance());
+        repository.save(newacc);
+        return newacc.getStatus();
+    }
 
 
     @Override
-    public boolean deActivateAccount(Long acNum)throws NullPointerException {
+    public boolean deActivateAccount(Long acNum) throws NullPointerException {
         Optional<BankAccount> option = repository.findById(acNum);
         BankAccount old = option.orElseThrow();
         boolean existStatus = old.getStatus();
@@ -97,49 +97,89 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public double withdraw(Long acNum, double amount) {
-        logger.info("Withdrawing Money from " + acNum + " with Amount " + amount);
-        if (amount <= 0)
-        {
-            throw new InvalidAmountException("Amount Should be Not ZERO and LESSER  " + amount);
-        }
+    public double withdraw(Long acNum, double amount) throws InvalidAmountException {
         Optional<BankAccount> option = repository.findById(acNum);
         BankAccount old = option.orElseThrow();
-        double existingBalance = old.getBalance();
-        double newBalance = existingBalance - amount;
-        BankAccount newacc = new BankAccount();
-        newacc.setBalance(newBalance);
-        newacc.setAcCrDt(old.getAcCrDt());
-        newacc.setStatus(old.getStatus());
-        newacc.setAcHldNm(old.getAcHldNm());
-        newacc.setAcNum(old.getAcNum());
-        repository.save(newacc);
-        return newacc.getBalance();
+        if (old.getStatus()) {
+            logger.info("Withdrawing Money from " + acNum + " with Amount " + amount);
+            if (amount <= 0) {
+                throw new InvalidAmountException("Amount Should be Not ZERO and LESSER  " + amount);
+            }
+
+            double existingBalance = old.getBalance();
+            double newBalance = existingBalance - amount;
+            BankAccount newacc = new BankAccount();
+            newacc.setBalance(newBalance);
+            newacc.setAcCrDt(old.getAcCrDt());
+            newacc.setStatus(old.getStatus());
+            newacc.setAcHldNm(old.getAcHldNm());
+            newacc.setAcNum(old.getAcNum());
+            repository.save(newacc);
+            return newacc.getBalance();
+        } else {
+            System.out.println("ACCOUNT IS DEACTIVATED SO YPO CANNOT PERFORM WITHDRAW OPERATION...");
+            return 0;
+        }
     }
 
     @Override
     public double deposit(Long acNum, double amount) throws InvalidAmountException {
-        if (amount <= 0)
-        {
-            throw new InvalidAmountException("Amount Should be Not ZERO and LESSER  " + amount);
-        }
         Optional<BankAccount> option = repository.findById(acNum);
         BankAccount old = option.orElseThrow();
-        double existingBalance = old.getBalance();
-        double newBalance = existingBalance + amount;
-        BankAccount newacc = new BankAccount();
-        newacc.setBalance(newBalance);
-        newacc.setAcCrDt(old.getAcCrDt());
-        newacc.setStatus(old.getStatus());
-        newacc.setAcHldNm(old.getAcHldNm());
-        newacc.setAcNum(old.getAcNum());
-        repository.save(newacc);
-        return newacc.getBalance();
+        if (old.getStatus()) {
+            if (amount <= 0) {
+                throw new InvalidAmountException("Amount Should be Not ZERO and LESSER  " + amount);
+            }
+
+            double existingBalance = old.getBalance();
+            double newBalance = existingBalance + amount;
+            BankAccount newacc = new BankAccount();
+            newacc.setBalance(newBalance);
+            newacc.setAcCrDt(old.getAcCrDt());
+            newacc.setStatus(old.getStatus());
+            newacc.setAcHldNm(old.getAcHldNm());
+            newacc.setAcNum(old.getAcNum());
+            repository.save(newacc);
+            return newacc.getBalance();
+        } else {
+            System.out.println("ACCOUNT IS DEACTIVATED SO YPO CANNOT PERFORM WITHDRAW OPERATION...");
+            return 0;
+        }
     }
 
     @Override
-    public int transferMoney(Long srcAc, Long dstAc, double amt) {
-        return 0;
+    public int transferMoney(Long acNum, Long srcAc, Long dstAc, double amount) {
+        Optional<BankAccount> src = repository.findById(srcAc);
+        BankAccount srcTrans = src.orElseThrow();
+        if (srcTrans.getStatus()) {
+            if (srcTrans.getAcNum() == null) {
+                throw new InvalidAccNumberException("Invalid Account Number : " + srcTrans.getAcNum());
+            }
+            double prevBalSrc = srcTrans.getBalance();
+            if (prevBalSrc <= 0) {
+                throw new InvalidAmountException("Insufficient Balance : " + prevBalSrc);
+            }
+            Optional<BankAccount> dest = repository.findById(dstAc);
+            BankAccount desTrans = dest.orElseThrow();
+            if (desTrans.getAcNum() == null) {
+                throw new InvalidAccNumberException("Invalid Account Number : " + desTrans.getAcNum());
+            }
+            double prevBalDest = desTrans.getBalance();
+            BankAccount updBalSrc = new BankAccount();
+            updBalSrc.setBalance(srcTrans.getBalance() - amount);
+            updBalSrc.setAcHldNm(srcTrans.getAcHldNm());
+            updBalSrc.setStatus(srcTrans.getStatus());
+            updBalSrc.setAcCrDt(srcTrans.getAcCrDt());
+            BankAccount updBalDes = new BankAccount();
+            updBalDes.setBalance(desTrans.getBalance() + amount);
+            updBalDes.setAcHldNm(desTrans.getAcHldNm());
+            updBalDes.setStatus(desTrans.getStatus());
+            updBalDes.setAcCrDt(desTrans.getAcCrDt());
+            return 1;
+        } else {
+            System.out.println("ACCOUNT IS DEACTIVATED SO YPO CANNOT PERFORM WITHDRAW OPERATION...");
+            return 0;
+        }
     }
 
     @Override

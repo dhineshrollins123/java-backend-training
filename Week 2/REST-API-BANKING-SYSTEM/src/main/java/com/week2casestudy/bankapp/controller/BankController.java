@@ -1,7 +1,9 @@
 package com.week2casestudy.bankapp.controller;
 
 import com.week2casestudy.bankapp.domain.BankAccount;
+import com.week2casestudy.bankapp.dto.AmountTransferDto;
 import com.week2casestudy.bankapp.dto.AppResponse;
+import com.week2casestudy.bankapp.exception.InActiveAccountException;
 import com.week2casestudy.bankapp.exception.InvalidAmountException;
 import com.week2casestudy.bankapp.service.BankService;
 import org.slf4j.Logger;
@@ -33,15 +35,19 @@ public class BankController {
     }
 
     @PutMapping("/withdraw")
-    public ResponseEntity<AppResponse<Double>> withDrawMoney(@RequestBody BankAccount ba) {
+    public ResponseEntity<AppResponse<Double>> withDrawMoney(@RequestBody BankAccount data) {
         try {
-            double amt = service.withdraw(ba.getAcNum(), ba.getBalance());
-            var response = new AppResponse<Double>();
-            response.setMsg("Money Withdrawn Sucessfully");
-            response.setSts("Sucess");
-            response.setBody(amt);
-            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        } catch (InvalidAmountException e) {
+            double amt = service.withdraw(data.getAcNum(), data.getBalance());
+            if(amt==0){
+                throw new InActiveAccountException("ACCOUNT IS NOT ACTIVATED...UNABLE TO PERFORM TRANSANCTION");
+            }
+                var response = new AppResponse<Double>();
+                response.setMsg("Money Withdrawn Sucessfully");
+                response.setSts("Sucess");
+                response.setBody(amt);
+                return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+
+        } catch (InvalidAmountException | InActiveAccountException e) {
             var response = new AppResponse<Double>();
             response.setMsg(e.getMessage());
             response.setSts("Fail");
@@ -54,12 +60,15 @@ public class BankController {
     public ResponseEntity<AppResponse<Double>> deposit(@RequestBody BankAccount dk) {
         try {
             double amt = service.deposit(dk.getAcNum(), dk.getBalance());
+            if(amt==0){
+                throw new InActiveAccountException("ACCOUNT IS NOT ACTIVATED...UNABLE TO PERFORM TRANSANCTION");
+            }
             var response = new AppResponse<Double>();
             response.setMsg("Money Deposited Sucessfully");
             response.setSts("Sucess");
             response.setBody(amt);
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-        } catch (InvalidAmountException e) {
+        } catch (InvalidAmountException | InActiveAccountException e) {
             var response = new AppResponse<Double>();
             response.setMsg(e.getMessage());
             response.setSts("Fail");
@@ -128,5 +137,26 @@ public class BankController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("/transfer")
+    public ResponseEntity<AppResponse<Double>> transferMoney(@RequestBody BankAccount data) {
+        try {
+            AmountTransferDto dt=new AmountTransferDto();
+            double amount = service.transferMoney(data.getAcNum(), data.getSrcAc(), data.getDstAc(),data.getBalance());
+            if(amount==0){
+                throw new InActiveAccountException("ACCOUNT IS NOT ACTIVATED...UNABLE TO PERFORM TRANSANCTION");
+            }
+            var response = new AppResponse<Double>();
+            response.setMsg("Money Transferred Sucessfully...");
+            response.setBody(amount);
+            response.setSts("Sucess");
+            return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch (InvalidAmountException e) {
+            var response = new AppResponse<Double>();
+            response.setMsg(e.getMessage());
+            response.setBody(0.0);
+            response.setSts("Failed");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

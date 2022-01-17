@@ -1,9 +1,31 @@
 package com.week2casestudy.bankapp.dto;
 
-    public class AmountTransferDto {
-        private Long srcAc;
-        private Long dstAc;
-        private Double amt;
+import com.week2casestudy.bankapp.domain.BankAccount;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
+public class AmountTransferDto {
+    public Long getAcNum() {
+        return acNum;
+    }
+
+    public void setAcNum(Long acNum) {
+        this.acNum = acNum;
+    }
+
+    @Id
+    private Long acNum;
+    private Long srcAc;
+    private Long dstAc;
+    private Double amt;
+
+    @OneToOne(mappedBy = "user")
+    private BankAccount account;
+
+
 
         public Long getSrcAc() {
             return srcAc;

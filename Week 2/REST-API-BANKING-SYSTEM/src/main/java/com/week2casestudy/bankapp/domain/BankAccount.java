@@ -1,9 +1,9 @@
 package com.week2casestudy.bankapp.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.week2casestudy.bankapp.dto.AmountTransferDto;
+import com.week2casestudy.bankapp.dto.AppResponse;
+
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -15,6 +15,10 @@ public class BankAccount {
     private Double balance;
     private Boolean status;
     private Date acCrDt;
+
+    @OneToOne
+    @JoinColumn(name = "user_ac_num")
+    private AmountTransferDto user;
 
     public Long getAcNum() {
         return acNum;
@@ -54,5 +58,15 @@ public class BankAccount {
 
     public void setAcCrDt(Date acCrDt) {
         this.acCrDt = acCrDt;
+    }
+
+    public Long getSrcAc() {
+        AmountTransferDto ref=new AmountTransferDto();
+        return ref.getSrcAc();
+    }
+
+    public Long getDstAc() {
+        AmountTransferDto ref=new AmountTransferDto();
+        return ref.getDstAc();
     }
 }
