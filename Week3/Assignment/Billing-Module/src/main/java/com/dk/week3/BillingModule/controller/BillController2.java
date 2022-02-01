@@ -37,7 +37,7 @@ public class BillController2 {
             response.setBody(false);
             response.setMessage(e.getMessage());
             response.setStatus("Failed");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -54,7 +54,7 @@ public class BillController2 {
             response.setBody(false);
             response.setMessage(e.getMessage());
             response.setStatus("Failed");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -71,7 +71,7 @@ public class BillController2 {
             response.setBody(false);
             response.setMessage(e.getMessage());
             response.setStatus("Failed");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -88,7 +88,7 @@ public class BillController2 {
             response.setBody(false);
             response.setMessage(e.getMessage());
             response.setStatus("Failed");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
         }
     }
 }

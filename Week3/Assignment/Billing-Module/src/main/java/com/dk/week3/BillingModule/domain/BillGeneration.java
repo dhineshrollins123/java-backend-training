@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -40,4 +42,7 @@ public class BillGeneration {
     @NotNull
     @Column(nullable = false)
     private Double payAmount;
+
+    public BillGeneration(String aPatientName) {
+    }
 }

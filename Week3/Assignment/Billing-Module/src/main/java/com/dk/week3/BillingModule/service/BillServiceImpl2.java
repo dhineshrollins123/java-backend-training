@@ -30,9 +30,9 @@ public class BillServiceImpl2 implements BillService2 {
 
     @Override
     public List<BillGenerationDto> billsFindByName(String name) {
-        var object = repository2.findByNameStarting(name);
+        var object = repository2.findByaPatientName(name);
         if (object.isEmpty()) {
-            throw new BillNotFoundException("Bills Not Found Searched By this Name : " + name);
+            throw new BillNotFoundException("Bills Not Found Searched By this Name : " + name) ;
         }
 
         List<BillGenerationDto> bills = new ArrayList<>();

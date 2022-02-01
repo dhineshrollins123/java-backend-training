@@ -2,10 +2,14 @@ package com.dk.week3.BillingModule.service;
 
 import com.dk.week3.BillingModule.dataobject.BillGenerationDto;
 import com.dk.week3.BillingModule.domain.BillGeneration;
+import com.dk.week3.BillingModule.repository.BillRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -14,6 +18,9 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 public class BillServiceImpl1Tests {
+
+    @MockBean
+    private BillRepository repository;
 
     @DisplayName("Testing Account Creation Method")
     @Test
@@ -26,6 +33,7 @@ public class BillServiceImpl1Tests {
         bill.setPayAmount(20000.00);
         bill.setPaidDate(LocalDate.of(2021, 12, 14));
         bill.setTreatment("Covid");
+        repository.save(bill);
         Assertions.assertEquals(1, bill.getPatientId());
         Assertions.assertEquals("Dhinesh", bill.getAPatientName());
         Assertions.assertEquals(LocalDate.of(2021, 12, 12), bill.getBillDate());
@@ -39,7 +47,7 @@ public class BillServiceImpl1Tests {
     @DisplayName("Testing MarkBills Method")
     @Test
     public void testMarkBill() {
-        BillGeneration bill = new BillGeneration();
+        BillGenerationDto bill = new BillGenerationDto();
         bill.setPaidStatus(false);
         boolean existStatus = bill.getPaidStatus();
         Assertions.assertEquals(false, existStatus);
@@ -70,7 +78,8 @@ public class BillServiceImpl1Tests {
             );
             bills.add(obj);
         }
-        Assertions.assertNotNull(bills);
+        List<BillGeneration> bill= repository.findAll();
+        Assertions.assertNotNull(bill);
 
     }
 

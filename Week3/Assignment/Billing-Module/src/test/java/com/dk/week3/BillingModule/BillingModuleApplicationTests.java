@@ -18,12 +18,14 @@ class BillingModuleApplicationTests {
 	@Autowired
 	private BillController2 controller2;
 
-	@DisplayName("Context 1 : Spring Application Context Loaded")
+	@DisplayName("Context 1 : Spring Application Context Loaded For Controller 1")
 	@Test
 	void contextLoads1() {
 		Assertions.assertNotNull(controller1);
 	}
-	@DisplayName("Context 2: Spring Application Context Loaded")
+
+
+	@DisplayName("Context 2 : Spring Application Context Loaded For Controller 2")
 	@Test
 	void contextLoads2() {
 		Assertions.assertNotNull(controller2);

@@ -32,4 +32,7 @@ public class BillGenerationDto {
     private Double payAmount;
     public BillGenerationDto(String treatment, Double payAmount) {
     }
+
+    public BillGenerationDto(String aPatientName) {
+    }
 }
