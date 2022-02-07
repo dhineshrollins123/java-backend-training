@@ -1,0 +1,23 @@
+package com.RedBusApplication.signup.registration;
+import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(path = "api/v1/registration")
+@AllArgsConstructor
+public class RegistrationController {
+
+    private RegistrationService registrationService;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    public String register(@RequestBody RegistrationRequest request){
+        return registrationService.register(request);
+    }
+
+    @GetMapping(path = "confirm")
+    public String confirm(@RequestParam("token") String token){
+        return registrationService.confirmToken(token);
+    }
+}
